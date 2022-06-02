@@ -1,0 +1,100 @@
+name: playground
+
+on:
+  push:
+    branches:
+      - enter/your-own-branch-name
+      # - main
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+      - converted_to_draft
+    branches:
+      - main
+      - production
+      - staging
+  workflow_dispatch:
+    inputs:
+      perform_test:
+        type: boolean
+        description: if perform test
+        default: true
+      perform_deploy:
+        type: boolean
+        description: if perform deploy
+        default: false
+      deploy_env:
+        description: env name to deploy
+        default: imaginary-env
+      deploy_account:
+        type: choice
+        description: account name used when deploy
+        options: 
+        - prod
+        - stg
+
+env:
+  # # #bots-laboratory
+  # SLACK_LOG_CHANNEL_ID: C048TAETS
+  # #test_nr_pub_dev
+  SLACK_LOG_CHANNEL_ID: C02V0G5C5DF
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Cat env
+      run: |
+        echo $GITHUB_EVENT_PATH
+        cat "$GITHUB_EVENT_PATH"
+    # - name: Checkout current code
+    #   uses: actions/checkout@v3
+    #   with:
+    #     persist-credentials: false
+    # - run: |
+    #     echo "${{ github.repository }}"
+    # - name: Public ECR Login test
+    #   run: |
+    #     aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
+    #   env:
+    #     # public なのでどのキーでも特段問題はない
+    #     AWS_ACCESS_KEY_ID: ${{ secrets.STG_ACCESS_KEY }}
+    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.STG_SECRET_KEY }}
+
+    # - uses: ./.github/actions/format-slack-message-payload
+    #   env:
+    #     JOB_SUCCESS: 'true'
+    # - run: |
+    #     echo "${SLACK_MESSAGE_PAYLOAD}"
+    # - name: Post to a Slack channel
+    #   id: slack
+    #   uses: slackapi/slack-github-action@v1.19.0
+    #   with:
+    #     channel-id: ${{ env.SLACK_LOG_CHANNEL_ID }}
+    #     payload: "${{ env.SLACK_MESSAGE_PAYLOAD }}"
+    #   env:
+    #     SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN_L }}
+    # - name: Post to a Slack channel
+    #   id: slack
+    #   uses: slackapi/slack-github-action@v1.19.0
+    #   with:
+    #     channel-id: ${{ env.SLACK_LOG_CHANNEL_ID }}
+    #     payload: |
+    #       {
+    #         "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+    #         "blocks": [
+    #           {
+    #             "type": "section",
+    #             "text": {
+    #               "type": "mrkdwn",
+    #               "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+    #             }
+    #           }
+    #         ]
+    #       }
+    #   env:
+    #     SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN_L }}
