@@ -51,6 +51,7 @@ jobs:
       run: |
         echo $GITHUB_EVENT_PATH
         cat "$GITHUB_EVENT_PATH"
+    - run: exit 1
     # - name: Checkout current code
     #   uses: actions/checkout@v3
     #   with:
