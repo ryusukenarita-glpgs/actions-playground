@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - enter/your-own-branch-name
+      - pr
       # - main
   pull_request:
     types:
